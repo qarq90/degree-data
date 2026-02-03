@@ -1,0 +1,26 @@
+Define and give theory content to write for practical experiment for <TOPIC>.
+It should be of 2 sentences each being of 10-15 words.
+
+TOPIC = ""
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Give features (3 features of two words) for the following <TOPIC>
+Give advantages (3 advantages of two words) for the following <TOPIC>
+Give limitations (3 limitations of two words) for the following <TOPIC>
+
+TOPIC = ""
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Compare the following TOPICS = <topic_1,topic_2,.....topic_n>.
+Use 8 factors to compare.
+Each point should be of 1 word.
+
+TOPICS = ["", ""]
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Give extreme generalized conclusion for the following experiment aim <AIM> (of 15 words).
+
+AIM = ""
