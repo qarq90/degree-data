@@ -3,6 +3,7 @@
 #directories
 /.idea/
 /.vscode/
+
 /SEM 5/INP/Experiments/EXP7
 /SEM 5/INP/Experiments/EXP8
 /SEM 5/INP/Experiments/EXP9
@@ -12,3 +13,4 @@
 /SEM 5/INP/Assignments/Assignment 1
 
 /SEM 6/WEBX/Experiments/EXP4
+/SEM 6/WEBX/Experiments/EXP5
