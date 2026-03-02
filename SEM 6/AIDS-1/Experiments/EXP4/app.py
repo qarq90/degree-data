@@ -259,3 +259,23 @@ kurtosis_sales = df["sales_millions"].kurtosis()
 
 print(f"\nKurtosis of Metacritic Score: {kurtosis_metacritic_score:.2f}")
 print(f"Kurtosis of Sales (Millions): {kurtosis_sales:.2f}")
+
+skewness_metacritic_score = df["metacritic_score"].skew()
+skewness_sales = df["sales_millions"].skew()
+
+print(f"\nSkewness of Metacritic Score: {skewness_metacritic_score:.2f}")
+print(f"Skewness of Sales (Millions): {skewness_sales:.2f}")
+
+if abs(skewness_metacritic_score) < 0.5:
+    print(f"\nMetacritic Score: Approximately symmetric (skewness = {skewness_metacritic_score:.2f})")
+elif skewness_metacritic_score < 0:
+    print(f"Metacritic Score: Negatively skewed (left-skewed) = {skewness_metacritic_score:.2f}")
+else:
+    print(f"Metacritic Score: Positively skewed (right-skewed) = {skewness_metacritic_score:.2f}")
+
+if abs(skewness_sales) < 0.5:
+    print(f"Sales: Approximately symmetric (skewness = {skewness_sales:.2f})")
+elif skewness_sales < 0:
+    print(f"Sales: Negatively skewed (left-skewed) = {skewness_sales:.2f}")
+else:
+    print(f"Sales: Positively skewed (right-skewed) = {skewness_sales:.2f}")
