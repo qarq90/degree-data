@@ -1,0 +1,66 @@
+{% extends 'layouts/root_layout.html' %}
+
+{% block content %}
+<div class="bg-white shadow-lg border border-gray-300 overflow-hidden">
+
+    <h1 class="bg-[#217346] text-white text-lg font-medium py-3 px-5 border-b-2 border-[#1e6b3c] flex items-center">
+        <span class="mr-2 text-xl">📊</span>
+        Currency Converter
+    </h1>
+
+    <form method="POST" action="{{ url_for('convert') }}" class="p-6 bg-white">
+        <div class="mb-4">
+            <label class="block text-[#1e3b2c] text-xl uppercase tracking-wide mb-1">Amount:</label>
+            <input type="number" name="amount" step="0.01" min="0" required 
+                   value="{{ request.form.get('amount', '') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-none text-xl font-[Calibri] bg-white hover:border-[#217346] focus:outline-none focus:border-2 focus:border-[#217346] focus:shadow-inner">
+        </div>
+        
+        <div class="mb-4">
+            <label class="block text-[#1e3b2c] text-xl uppercase tracking-wide mb-1">From:</label>
+            <select name="from_currency" required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-none text-xl font-[Calibri] bg-white hover:border-[#217346] focus:outline-none focus:border-2 focus:border-[#217346] appearance-none bg-no-repeat bg-right-4"
+                    style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23217346\' width=\'18px\' height=\'18px\'%3e%3cpath d=\'M7 10l5 5 5-5z\'/%3e%3c/svg%3e'); background-position: right 10px center;">
+                <option value="USD" {% if request.form.get('from_currency') == 'USD' %}selected{% endif %}>US Dollar (USD)</option>
+                <option value="INR" {% if request.form.get('from_currency') == 'INR' %}selected{% endif %}>Indian Rupee (INR)</option>
+                <option value="GBP" {% if request.form.get('from_currency') == 'GBP' %}selected{% endif %}>Pound Sterling (GBP)</option>
+                <option value="SAR" {% if request.form.get('from_currency') == 'SAR' %}selected{% endif %}>Saudi Riyal (SAR)</option>
+                <option value="CNY" {% if request.form.get('from_currency') == 'CNY' %}selected{% endif %}>Chinese Yuan (CNY)</option>
+            </select>
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-[#1e3b2c] text-xl uppercase tracking-wide mb-1">To:</label>
+            <select name="to_currency" required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-none text-xl font-[Calibri] bg-white hover:border-[#217346] focus:outline-none focus:border-2 focus:border-[#217346] appearance-none bg-no-repeat bg-right-4"
+                    style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23217346\' width=\'18px\' height=\'18px\'%3e%3cpath d=\'M7 10l5 5 5-5z\'/%3e%3c/svg%3e'); background-position: right 10px center;">
+                <option value="USD" {% if request.form.get('to_currency') == 'USD' %}selected{% endif %}>US Dollar (USD)</option>
+                <option value="INR" {% if request.form.get('to_currency') == 'INR' %}selected{% endif %}>Indian Rupee (INR)</option>
+                <option value="GBP" {% if request.form.get('to_currency') == 'GBP' %}selected{% endif %}>Pound Sterling (GBP)</option>
+                <option value="SAR" {% if request.form.get('to_currency') == 'SAR' %}selected{% endif %}>Saudi Riyal (SAR)</option>
+                <option value="CNY" {% if request.form.get('to_currency') == 'CNY' %}selected{% endif %}>Chinese Yuan (CNY)</option>
+            </select>
+        </div>
+        
+        <button type="submit" 
+                class="w-full bg-[#217346] text-white border-none py-3 px-5 text-xl uppercase tracking-wide cursor-pointer transition-colors hover:bg-[#1e6b3c] active:bg-[#185a32] rounded-none">
+            Convert
+        </button>
+    </form>
+
+    {% if result %}
+    <div class="mx-6 my-4 p-4 bg-[#e6f0e9] border border-[#bad1c3] border-l-4 border-l-[#217346]">
+        <h3 class="text-[#1e3b2c] text-xl uppercase tracking-wide mb-2">Result:</h3>
+        <p class="text-2xl text-[#217346] font-semibold break-words">
+            {{ amount }} {{ from_curr }} = {{ result }} {{ to_curr }}
+        </p>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="mx-6 my-4 p-3 bg-red-50 border border-red-600 border-l-4 border-l-red-600">
+        <p class="text-red-600 text-xl m-0">{{ error }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

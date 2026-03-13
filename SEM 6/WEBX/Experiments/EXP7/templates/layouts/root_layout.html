@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}WEBX EXP 7 | Flask{% endblock %}</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+    </head>
+    <body
+        class="h-screen w-screen bg-white flex justify-center items-center font-['Segoe_UI','Calibri','Arial',sans-serif] m-0 p-0"
+    >
+        <div class="w-[90%] max-w-[600px]">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
