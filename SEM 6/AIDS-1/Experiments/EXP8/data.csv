@@ -1,0 +1,37 @@
+id,name,developer,genre,release_year,metacritic_score,sales_millions,peak_players
+1,Call of Duty 4: Modern Warfare,Infinity Ward,First-Person Shooter,2007,94,15.7,50000
+2,Call of Duty: Modern Warfare 2,Infinity Ward,First-Person Shooter,2009,94,25,120000
+3,Call of Duty: Black Ops,Treyarch,First-Person Shooter,2010,87,30.7,150000
+4,Call of Duty: Warzone,Infinity Ward,Battle Royale,2020,80,0,6000000
+5,Call of Duty: Modern Warfare (2019),Infinity Ward,First-Person Shooter,2019,80,41,500000
+6,Resident Evil 2,Capcom,Survival Horror,1998,93,4.96,0
+7,Resident Evil 4,Capcom,Survival Horror,2005,96,7.1,0
+8,Resident Evil 7: Biohazard,Capcom,Survival Horror,2017,86,12.4,20000
+9,Resident Evil Village,Capcom,Survival Horror,2021,84,8.5,100000
+10,Resident Evil (Remake),Capcom,Survival Horror,2002,91,1.35,0
+11,Grand Theft Auto V,Rockstar Games,Action-Adventure,2013,97,195,500000
+12,Red Dead Redemption 2,Rockstar Games,Action-Adventure,2018,97,65,120000
+13,Grand Theft Auto: San Andreas,Rockstar Games,Action-Adventure,2004,93,27.5,0
+14,Bully,Rockstar Games,Action-Adventure,2006,87,1.5,0
+15,Max Payne 3,Rockstar Games,Third-Person Shooter,2012,87,4,5000
+16,God of War,Santa Monica Studio,Action-Adventure,2018,94,23,0
+17,The Last of Us,Naughty Dog,Action-Adventure,2013,95,20,0
+18,Uncharted 4: A Thief's End,Naughty Dog,Action-Adventure,2016,93,16,0
+19,Spider-Man,Insomniac Games,Action-Adventure,2018,87,20,0
+20,Horizon Zero Dawn,Guerrilla Games,Action RPG,2017,89,20,0
+21,The Witcher 3: Wild Hunt,CD Projekt Red,RPG,2015,93,50,103000
+22,Cyberpunk 2077,CD Projekt Red,RPG,2020,86,25,830000
+23,Elden Ring,FromSoftware,Action RPG,2022,96,25,953000
+24,Sekiro: Shadows Die Twice,FromSoftware,Action-Adventure,2019,90,8,124000
+25,DOOM Eternal,id Software,First-Person Shooter,2020,88,12,75000
+26,Portal 2,Valve,Puzzle,2011,95,12,40000
+27,Left 4 Dead 2,Valve,Survival Horror,2009,89,20,50000
+28,Baldur's Gate 3,Larian Studios,RPG,2023,96,15,875000
+29,Divinity: Original Sin 2,Larian Studios,RPG,2017,93,7,50000
+30,Hades,Supergiant Games,Roguelike,2020,93,4,47000
+31,Hollow Knight,Team Cherry,Metroidvania,2017,90,6,18000
+32,Stardew Valley,ConcernedApe,Simulation,2016,89,30,98000
+33,Terraria,Re-Logic,Sandbox,2011,88,45,162000
+34,Minecraft,Mojang,Sandbox,2011,93,238,230000
+35,Among Us,InnerSloth,Party,2018,85,100,438000
+36,Valheim,Iron Gate Studio,Survival,2021,91,12,500000
