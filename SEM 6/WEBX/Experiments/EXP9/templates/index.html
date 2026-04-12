@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather Wizard</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Manrope", sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .container {
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                width: 100%;
+                max-width: 600px;
+            }
+
+            /* Upper Body - Search Section */
+            .upper-body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 30px;
+                flex-wrap: wrap;
+            }
+
+            .input-box {
+                font-family: "Manrope", sans-serif;
+                font-weight: bold;
+                background-color: transparent;
+                width: 59%;
+                height: 2.5rem;
+                padding: 0.5rem;
+                border-radius: 10px;
+                border: 2px solid #32174d;
+                font-size: 1.2rem;
+                color: #32174d;
+                margin: 0.5rem;
+                transition: all 0.3s ease;
+            }
+
+            .input-box:focus {
+                outline: none;
+                background-color: #fff;
+                border-color: #ffd700;
+            }
+
+            .btn {
+                background-color: ghostwhite;
+                color: #32174d;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 2.5rem;
+                height: 2.5rem;
+                padding: 0.5rem;
+                border: 2px solid #32174d;
+                border-radius: 10px;
+                margin: 0.5rem;
+                transition: 0.5s all ease;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                color: #ffd700;
+                background-color: #32174d;
+                border: 2px solid #ffd700;
+                transform: translateY(-2px);
+            }
+
+            /* Lower Body - Weather Display */
+            .lower-body {
+                display: flex;
+                justify-content: center;
+            }
+
+            .weather-card {
+                width: 100%;
+                animation: fadeIn 0.5s ease;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .weather-main {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .weather-icon {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+            }
+
+            .temperature {
+                font-size: 48px;
+                font-weight: bold;
+                color: #32174d;
+                margin: 10px 0;
+            }
+
+            .city-name {
+                font-size: 28px;
+                font-weight: bold;
+                color: #32174d;
+            }
+
+            .country {
+                font-size: 18px;
+                color: #666;
+            }
+
+            .description {
+                font-size: 18px;
+                color: #666;
+                text-transform: capitalize;
+                margin: 10px 0;
+            }
+
+            .weather-details {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .detail-item {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                border: 1px solid #e9ecef;
+            }
+
+            .detail-label {
+                font-size: 12px;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 5px;
+            }
+
+            .detail-value {
+                font-size: 18px;
+                font-weight: bold;
+                color: #32174d;
+            }
+
+            .error-message {
+                background: #f8d7da;
+                color: #721c24;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            /* Responsive Design */
+            @media screen and (max-width: 768px) {
+                .upper-body {
+                    flex-direction: column;
+                }
+
+                .input-box {
+                    width: 90%;
+                    font-size: 1rem;
+                }
+
+                .btn {
+                    width: 90%;
+                    margin: 0.5rem auto;
+                }
+
+                .btn-div {
+                    display: flex;
+                    width: 90%;
+                    gap: 10px;
+                }
+
+                .btn-div .btn {
+                    width: 50%;
+                }
+
+                .weather-details {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            @media screen and (max-width: 480px) {
+                .container {
+                    padding: 20px;
+                }
+
+                .temperature {
+                    font-size: 36px;
+                }
+
+                .city-name {
+                    font-size: 24px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Upper Body - Search Section -->
+            <div class="upper-body">
+                <input
+                    type="text"
+                    id="input-box"
+                    class="input-box"
+                    placeholder="Enter your city here:"
+                />
+                <div class="btn-div">
+                    <div class="btn" id="search-btn">🔍</div>
+                    <div class="btn" id="clear-btn">⌫</div>
+                </div>
+            </div>
+
+            <!-- Lower Body - Weather Display -->
+            <div class="lower-body">
+                <div id="weather-display" class="hidden"></div>
+            </div>
+        </div>
+
+        <script>
+            // Get DOM elements
+            const inputBox = document.getElementById("input-box");
+            const searchBtn = document.getElementById("search-btn");
+            const clearBtn = document.getElementById("clear-btn");
+            const weatherDisplay = document.getElementById("weather-display");
+
+            // Fetch weather data - exactly like your React component
+            const fetchHandler = async () => {
+                const cityName = inputBox.value.trim();
+
+                if (cityName === "") {
+                    alert("Enter a Valid City or Country name...");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/get-weather", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ city: cityName }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Show weather data
+                        displayWeatherData(data);
+                        weatherDisplay.classList.remove("hidden");
+                    } else {
+                        alert(data.error || "Error fetching weather data");
+                        weatherDisplay.classList.add("hidden");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Network error. Please check your connection.");
+                    weatherDisplay.classList.add("hidden");
+                }
+            };
+
+            // Display weather data - matching your React WeatherData component
+            const displayWeatherData = (data) => {
+                const iconUrl = `https://openweathermap.org/img/w/${data.icon}.png`;
+
+                weatherDisplay.innerHTML = `
+                <div class="weather-card">
+                    <div class="weather-main">
+                        <div class="weather-icon">
+                            <img src="${iconUrl}" alt="${data.des}" style="width: 100px; height: 100px;">
+                        </div>
+                        <div class="temperature">${Math.round(data.celcius)}°C</div>
+                        <div class="city-name">${data.name}, ${data.country}</div>
+                        <div class="description">${data.des}</div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <div class="detail-label">💧 Humidity</div>
+                            <div class="detail-value">${data.humidity}%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">💨 Wind Speed</div>
+                            <div class="detail-value">${data.wind} m/s</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">📊 Pressure</div>
+                            <div class="detail-value">${data.pressure} hPa</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">👁️ Visibility</div>
+                            <div class="detail-value">${(data.visibility / 1000).toFixed(1)} km</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">📍 Longitude</div>
+                            <div class="detail-value">${data.coLon}°</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">📍 Latitude</div>
+                            <div class="detail-value">${data.coLat}°</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            };
+
+            // Clear handler - exactly like your React component
+            const clearHandler = () => {
+                if (inputBox.value === "") {
+                    alert("Input Field is already Empty...");
+                } else {
+                    inputBox.value = "";
+                    weatherDisplay.classList.add("hidden");
+                }
+            };
+
+            // Event listeners
+            searchBtn.addEventListener("click", fetchHandler);
+            clearBtn.addEventListener("click", clearHandler);
+
+            // Allow Enter key to search
+            inputBox.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    fetchHandler();
+                }
+            });
+        </script>
+    </body>
+</html>
