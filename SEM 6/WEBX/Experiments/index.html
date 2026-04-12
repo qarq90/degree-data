@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Demo</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+        }
+        .post {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>AJAX Data Fetch Example</h2>
+    <button onclick="loadData()">Fetch Data</button>
+
+    <div id="output"></div>
+
+    <script>
+        function loadData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    displayData(data);
+                }
+            };
+
+            xhr.send();
+        }
+
+        function displayData(data) {
+            var output = document.getElementById("output");
+            output.innerHTML = "";
+
+            data.slice(0, 5).forEach(function(post) {
+                var div = document.createElement("div");
+                div.className = "post";
+                div.innerHTML = "<h3>" + post.title + "</h3><p>" + post.body + "</p>";
+                output.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+</html>
