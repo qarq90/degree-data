@@ -13,11 +13,35 @@ TOPIC = ""
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Compare the following TOPICS = <topic_1,topic_2,.....topic_n>.
-Use 8 factors to compare.
-Each point should be of 1 word.
+Differentiate / Comparisons
 
-TOPICS = ["", ""]
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Questions = [
+    // Questions
+]
+
+Answer each in a tabular format in following way:
+Each point within 2-5 words.
+Do not include extra text before or after the table (no introductions, summaries, or remarks).
+For each question, use only the factors listed below. If a factor does not apply to a topic, write "Not applicable".
+
+Factor | Topic1 | Topic2 | .... | TopicN
+
+Factors = [
+    // Factors
+    If full form needed: Full form,
+    Technology,
+    Strucutre,
+    Working,
+    Data Rate,
+    Feature Introduced,
+    Security,
+    Interference,
+    Complexity,
+    Limitation,
+    Applications
+]
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
