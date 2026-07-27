@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login · Threat Model (simple)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .card {
+      max-width: 1000px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 2rem 1.8rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2eaf2;
+    }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #0a1e2f;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+    .sub {
+      color: #3a5670;
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+      border-left: 4px solid #1e4f8a;
+      padding-left: 1rem;
+      background: #eef6fd;
+      border-radius: 0 12px 12px 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 1.8rem;
+    }
+
+    /* left panel – login mock */
+    .login-box {
+      background: #fafcff;
+      border-radius: 1.5rem;
+      padding: 1.8rem 1.5rem;
+      border: 1px solid #dde6ef;
+    }
+    .login-box h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #0a1e2f;
+      margin-bottom: 0.2rem;
+    }
+    .badge {
+      background: #d4e2f5;
+      color: #1a3b5c;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 1rem;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 1.2rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    .field label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1f3f5e;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .field input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1px solid #cbd8e6;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      background: white;
+    }
+    .field input:focus {
+      outline: 2px solid #1e4f8a30;
+      border-color: #1e4f8a;
+    }
+    .hint {
+      font-size: 0.7rem;
+      color: #6a7f96;
+      margin-top: 0.2rem;
+    }
+    .hint i {
+      color: #b22222;
+    }
+    .mfa-row {
+      background: #eef6fd;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      border: 1px dashed #1e4f8a60;
+      margin: 0.8rem 0 1rem;
+    }
+    .mfa-row input {
+      border: none;
+      background: transparent;
+      width: 70px;
+      border-bottom: 2px solid #1e4f8a40;
+      padding: 0.1rem 0;
+    }
+    .mfa-row input:focus {
+      outline: none;
+      border-bottom-color: #1e4f8a;
+    }
+    .btn {
+      width: 100%;
+      background: #0a1e2f;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+    .btn:hover {
+      background: #143450;
+      transform: scale(0.98);
+    }
+    .vuln-tag {
+      margin-top: 1.2rem;
+      background: #fee9e9;
+      border-radius: 40px;
+      padding: 0.4rem 1rem;
+      font-size: 0.7rem;
+      color: #941b1b;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.8rem;
+      border: 1px solid #fbc5c5;
+    }
+
+    /* right panel – threats & controls */
+    .threat-box {
+      background: #fafcff;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.2rem 0.8rem;
+      border: 1px solid #dde6ef;
+    }
+    .threat-box h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0a1e2f;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .item {
+      background: white;
+      border-radius: 14px;
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.8rem;
+      border-left: 5px solid #b3c6db;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+    }
+    .item.crit { border-left-color: #b22222; }
+    .item.high { border-left-color: #d97706; }
+    .item.med { border-left-color: #1e4f8a; }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .vname {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #0a1e2f;
+    }
+    .cia {
+      font-size: 0.6rem;
+      background: #1e293b;
+      color: white;
+      padding: 0.05rem 0.7rem;
+      border-radius: 30px;
+    }
+    .desc {
+      font-size: 0.75rem;
+      color: #2c3e50cc;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.1rem;
+    }
+    .actor {
+      background: #eef2f6;
+      padding: 0.05rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: #253b50;
+    }
+    .control {
+      font-size: 0.7rem;
+      background: #e2f3e8;
+      padding: 0.1rem 0.8rem;
+      border-radius: 30px;
+      color: #05603a;
+      display: inline-block;
+      margin-top: 0.2rem;
+      border: 1px solid #a5dfc2;
+    }
+    .control i {
+      margin-right: 3px;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.7rem;
+      color: #4d657e;
+      border-top: 1px solid #dfe8f2;
+      padding-top: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 750px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <h1>🔐 Login · Threat Model</h1>
+  <div class="sub"><strong>Banking Mobile App</strong> · 5 vulnerabilities · CIA · controls</div>
+
+  <div class="grid">
+    <!-- LEFT: login panel (vulnerable) -->
+    <div class="login-box">
+      <h2>📱 Sign in</h2>
+      <span class="badge">SecureBank · mobile</span>
+
+      <div class="field">
+        <label>👤 Username</label>
+        <input type="text" value="admin' OR '1'='1" placeholder="enter username">
+        <div class="hint"><i>⚠️</i> SQL injection (vuln #1)</div>
+      </div>
+
+      <div class="field">
+        <label>🔒 Password</label>
+        <input type="password" value="123456" placeholder="••••••">
+        <div class="hint"><i>⚠️</i> weak password (vuln #2)</div>
+      </div>
+
+      <div class="mfa-row">
+        <span>📱 2FA (missing · vuln #3)</span>
+        <input type="text" placeholder="------" disabled style="background:#eef2f6; color:#6a7f96;">
+        <span style="color:#b22222;">✖</span>
+      </div>
+
+      <button class="btn" onclick="alert('⚠️ Demo: vulnerable to SQLi, brute-force, plaintext logs.')">Log in (insecure)</button>
+
+      <div class="vuln-tag">
+        <span><strong>#4</strong> No rate-limit · <strong>#5</strong> logs passwords in plaintext</span>
+        <span style="margin-left:auto; background:#fccfcf; padding:0 12px; border-radius:40px;">CIA at risk</span>
+      </div>
+      <div style="font-size:0.65rem; background:#f5f8fc; border-radius:30px; padding:0.2rem 1rem; margin-top:0.4rem; text-align:center; color:#3a5670;">
+        <i>📄 Log:</i> <span style="font-family:monospace;">"User: admin' OR '1'='1 , Pass: 123456"</span> (plaintext!)
+      </div>
+    </div>
+
+    <!-- RIGHT: threat list + controls -->
+    <div class="threat-box">
+      <h3>⚠️ Vulnerabilities · Threats · Controls</h3>
+
+      <div class="item crit">
+        <div class="top"><span class="vname">1. SQL Injection</span><span class="cia">C · I</span></div>
+        <div class="desc"><span>🧑‍💻 External hacker · <span class="actor">' OR '1'='1</span></span><span>CIA: C, I</span></div>
+        <div class="control">✅ <strong>Parameterized queries</strong> (prepared statements)</div>
+      </div>
+
+      <div class="item high">
+        <div class="top"><span class="vname">2. Weak password policy</span><span class="cia">C</span></div>
+        <div class="desc"><span>🤖 Bot · credential stuffing</span><span>CIA: C</span></div>
+        <div class="control">✅ <strong>Bcrypt + salt</strong> · 12-char policy</div>
+      </div>
+
+      <div class="item crit">
+        <div class="top"><span class="vname">3. Missing MFA</span><span class="cia">C · I</span></div>
+        <div class="desc"><span>🎣 Phishing · stolen password</span><span>CIA: C, I</span></div>
+        <div class="control">✅ <strong>TOTP</strong> (time-based OTP)</div>
+      </div>
+
+      <div class="item med">
+        <div class="top"><span class="vname">4. No rate limiting</span><span class="cia">A</span></div>
+        <div class="desc"><span>⚡ Brute-force bot · 10k/min</span><span>CIA: A</span></div>
+        <div class="control">✅ <strong>Throttling</strong> + progressive delays</div>
+      </div>
+
+      <div class="item high">
+        <div class="top"><span class="vname">5. Plaintext password logging</span><span class="cia">C</span></div>
+        <div class="desc"><span>👤 Malicious insider · sysadmin</span><span>CIA: C</span></div>
+        <div class="control">✅ <strong>Mask sensitive fields</strong> · exclude password</div>
+      </div>
+
+      <div class="footer">
+        <span>🔹 Each vulnerability → CIA risk → design control</span>
+        <span>📌 SDLC · threat modelling</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
