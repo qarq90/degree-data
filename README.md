@@ -58,6 +58,13 @@
         SEM 6 in a nutshell.txt
 
     - SEM 7 :
+        AIDS-2 (Artifical Intelligence and Data Science 2)
+        CSL (Cyber Security and Laws)
+        DMMM (Disaster Management and Migitaton Measures)
+        IOE (Internet of Everything)
+        IRS (Information Retrieval System)
+        SAD (Secure Application Develpment)
+        STQA (Software Testing and Quality Assurance)
         $Micro Projects
         $Mini Project
         Syllabus.pdf
@@ -103,5 +110,5 @@ To use the data and scripts in this repository, follow these steps:
 
 If you have any questions, suggestions, or feedback, please contact the repository maintainers at:
 
-- **Email:** scythethroughtheheart05@gmail.com
+- **Email:** wetworksspectre@gmail.com
 - **GitHub:** (https://github.com/qarq90/qarq90)
