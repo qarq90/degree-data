@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Login / Signup</title>
+        <style>
+            :root {
+                --bg: #eeeeee;
+                --card: #f7f7f7;
+                --surface: #ffffff;
+                --accent: #286844;
+                --accent-hover: #225c3b;
+                --text: #343a40;
+                --muted: #687078;
+                --border: #d9dde0;
+                --danger: #c0392b;
+                --success: #2e7d32;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Roboto, Arial, sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                margin: 0;
+                padding: 10px;
+                background: #eeeeee;
+                color: var(--text);
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .container {
+                width: 480px;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+
+            .card {
+                position: relative;
+                background: #f7f7f7;
+                padding: 30px 20px 20px;
+                border-radius: 0;
+                border: 1px solid #e1e1e1;
+                box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+            }
+
+            .card::before {
+                content: "GOONER NIGGAS PORTAL";
+                position: absolute;
+                top: 0;
+                width: 100%;
+                left: 0;
+                box-sizing: border-box;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                padding: 0 18px;
+                background: var(--accent);
+                color: #ffffff;
+                font-size: 15px;
+                font-weight: 400;
+                letter-spacing: 0.3px;
+            }
+
+            .tabs {
+                display: flex;
+                gap: 0;
+                margin: 28px 0 20px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .tabs button {
+                flex: 1;
+                padding: 11px 10px;
+                border: none;
+                border-radius: 0;
+                background: transparent;
+                cursor: pointer;
+                color: var(--muted);
+                font-size: 13px;
+                font-weight: 500;
+                transition:
+                    background 0.15s ease,
+                    color 0.15s ease;
+            }
+
+            .tabs button.active {
+                background: var(--accent);
+                color: #ffffff;
+                box-shadow: none;
+            }
+
+            form {
+                display: grid;
+                gap: 16px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 7px;
+                color: #4c555c;
+                font-size: 13px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.7px;
+            }
+
+            input,
+            select {
+                width: 100%;
+                height: 40px;
+                padding: 9px 11px;
+                border: 1px solid var(--border);
+                border-radius: 0;
+                background: var(--surface);
+                color: var(--text);
+                font-family: inherit;
+                font-size: 14px;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+            }
+
+            input::placeholder {
+                color: #a0a6ab;
+            }
+
+            input:hover,
+            select:hover {
+                border-color: #c4c9cd;
+            }
+
+            input:focus,
+            select:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow: 0 0 0 2px rgba(40, 104, 68, 0.1);
+            }
+
+            .row {
+                display: flex;
+                gap: 12px;
+            }
+
+            .row .col {
+                flex: 1;
+            }
+
+            .field-inline {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .field-inline input {
+                flex: 1;
+            }
+
+            .toggle-pass {
+                height: 40px;
+                padding: 0 12px;
+                background: #f1f2f2;
+                border: 1px solid var(--border);
+                border-radius: 0;
+                color: #566069;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .toggle-pass:hover {
+                background: #e8eae9;
+                color: var(--accent);
+            }
+
+            .actions {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 4px;
+            }
+
+            .btn {
+                min-height: 42px;
+                padding: 10px 22px;
+                border: none;
+                border-radius: 0;
+                background: var(--accent);
+                color: #ffffff;
+                cursor: pointer;
+                font-family: inherit;
+                font-size: 13px;
+                font-weight: 500;
+                letter-spacing: 0.8px;
+                text-transform: uppercase;
+                transition: background 0.15s ease;
+            }
+
+            .btn:hover {
+                background: var(--accent-hover);
+                box-shadow: none;
+            }
+
+            .btn:active {
+                transform: none;
+                background: #1d5134;
+            }
+
+            .btn.ghost {
+                background: transparent;
+                color: var(--accent);
+                border: 1px solid var(--accent);
+            }
+
+            .btn.ghost:hover {
+                background: rgba(40, 104, 68, 0.06);
+            }
+
+            .muted,
+            .helper {
+                color: var(--muted);
+                font-size: 12px;
+            }
+
+            .small {
+                font-size: 12px;
+            }
+
+            .error {
+                margin-top: 4px;
+                color: var(--danger);
+                font-size: 12px;
+            }
+
+            .success {
+                color: var(--success);
+                font-size: 13px;
+            }
+
+            input[type="checkbox"] {
+                width: auto;
+                height: auto;
+                margin-right: 6px;
+                accent-color: var(--accent);
+            }
+
+            @media (max-width: 520px) {
+                body {
+                    padding: 8px;
+                    align-items: flex-start;
+                }
+
+                .container {
+                    width: 100%;
+                }
+
+                .card {
+                    padding: 30px 15px 18px;
+                }
+
+                .row {
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
+                .actions {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .actions .btn {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <section>
+                <div class="card">
+                    <div class="tabs" role="tablist" aria-label="Auth tabs">
+                        <button
+                            id="tab-login"
+                            class="active"
+                            role="tab"
+                            aria-selected="true"
+                        >
+                            Login
+                        </button>
+                        <button
+                            id="tab-signup"
+                            role="tab"
+                            aria-selected="false"
+                        >
+                            Sign up
+                        </button>
+                    </div>
+
+                    <div id="login-panel">
+                        <form id="login-form" novalidate>
+                            <div>
+                                <label for="login-identifier"
+                                    >Email or Username</label
+                                >
+                                <input
+                                    id="login-identifier"
+                                    name="identifier"
+                                    type="text"
+                                    required
+                                    placeholder="you@example.com or username"
+                                />
+                                <div
+                                    class="error"
+                                    id="login-identifier-error"
+                                ></div>
+                            </div>
+
+                            <div>
+                                <label for="login-password">Password</label>
+                                <div class="field-inline">
+                                    <input
+                                        id="login-password"
+                                        name="password"
+                                        type="password"
+                                        required
+                                        placeholder="Enter password"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="toggle-pass"
+                                        data-target="login-password"
+                                    >
+                                        Show
+                                    </button>
+                                </div>
+                                <div
+                                    class="error"
+                                    id="login-password-error"
+                                ></div>
+                            </div>
+
+                            <div class="actions">
+                                <div class="small helper">
+                                    Forgot password? Click reset on server.
+                                </div>
+                                <button class="btn" type="submit">Login</button>
+                            </div>
+                            <div
+                                id="login-feedback"
+                                class="muted"
+                                role="status"
+                            ></div>
+                        </form>
+                    </div>
+
+                    <div id="signup-panel" style="display: none">
+                        <form id="signup-form" novalidate>
+                            <div>
+                                <label for="username">Username</label>
+                                <input
+                                    id="username"
+                                    name="username"
+                                    type="text"
+                                    required
+                                    placeholder="username (3–20 chars)"
+                                />
+                                <div class="error" id="username-error"></div>
+                            </div>
+
+                            <div>
+                                <label for="email">Email</label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    required
+                                    placeholder="you@example.com"
+                                />
+                                <div class="error" id="email-error"></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="phone">Phone</label>
+                                    <input
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        placeholder="+1234567890"
+                                    />
+                                    <div class="error" id="phone-error"></div>
+                                </div>
+                                <div class="col">
+                                    <label for="dob">Date of birth</label>
+                                    <input
+                                        id="dob"
+                                        name="dob"
+                                        type="date"
+                                        required
+                                    />
+                                    <div class="error" id="dob-error"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="password">Password</label>
+                                <div class="field-inline">
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        required
+                                        placeholder="Minimum 8 characters"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="toggle-pass"
+                                        data-target="password"
+                                    >
+                                        Show
+                                    </button>
+                                </div>
+                                <div class="error" id="password-error"></div>
+                            </div>
+
+                            <div>
+                                <label for="confirm-password"
+                                    >Confirm password</label
+                                >
+                                <input
+                                    id="confirm-password"
+                                    name="confirmPassword"
+                                    type="password"
+                                    required
+                                />
+                                <div
+                                    class="error"
+                                    id="confirm-password-error"
+                                ></div>
+                            </div>
+
+                            <div>
+                                <label
+                                    ><input id="terms" type="checkbox" /> I
+                                    agree to the terms and privacy policy</label
+                                >
+                                <div class="error" id="terms-error"></div>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn" type="submit">
+                                    Create account
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn ghost"
+                                    id="fill-sample"
+                                >
+                                    Fill sample
+                                </button>
+                            </div>
+                            <div id="signup-feedback" role="status"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script>
+            const qs = (s) => document.querySelector(s);
+            const qsa = (s) => document.querySelectorAll(s);
+
+            const tabLogin = qs("#tab-login");
+            const tabSignup = qs("#tab-signup");
+            const loginPanel = qs("#login-panel");
+            const signupPanel = qs("#signup-panel");
+
+            function showPanel(panel) {
+                if (panel === "login") {
+                    tabLogin.classList.add("active");
+                    tabLogin.setAttribute("aria-selected", "true");
+                    tabSignup.classList.remove("active");
+                    tabSignup.setAttribute("aria-selected", "false");
+                    loginPanel.style.display = "block";
+                    signupPanel.style.display = "none";
+                } else {
+                    tabSignup.classList.add("active");
+                    tabSignup.setAttribute("aria-selected", "true");
+                    tabLogin.classList.remove("active");
+                    tabLogin.setAttribute("aria-selected", "false");
+                    loginPanel.style.display = "none";
+                    signupPanel.style.display = "block";
+                }
+            }
+
+            tabLogin.addEventListener("click", () => showPanel("login"));
+            tabSignup.addEventListener("click", () => showPanel("signup"));
+
+            qsa(".toggle-pass").forEach((btn) =>
+                btn.addEventListener("click", (e) => {
+                    const id = btn.dataset.target;
+                    const el = qs("#" + id);
+                    if (!el) return;
+                    if (el.type === "password") {
+                        el.type = "text";
+                        btn.textContent = "Hide";
+                    } else {
+                        el.type = "password";
+                        btn.textContent = "Show";
+                    }
+                }),
+            );
+
+            const validators = {
+                username: (v) =>
+                    /^[A-Za-z0-9_]{3,20}$/.test(v) ||
+                    "3–20 chars; letters, numbers, underscore only",
+                email: (v) =>
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ||
+                    "Enter a valid email",
+                phone: (v) =>
+                    v.trim() === "" ||
+                    /^\+?\d{10,15}$/.test(v) ||
+                    "Enter 10–15 digits, optional +",
+                password: (v) =>
+                    (v.length >= 8 &&
+                        /[a-z]/.test(v) &&
+                        /[A-Z]/.test(v) &&
+                        /\d/.test(v)) ||
+                    "Min 8 chars with upper, lower and number",
+                confirmPassword: (v, all) =>
+                    v === all.password || "Passwords do not match",
+                dob: (v) => {
+                    if (!v) return "Date of birth is required";
+                    const dob = new Date(v);
+                    if (Number.isNaN(dob)) return "Invalid date";
+                    const today = new Date();
+                    const age =
+                        today.getFullYear() -
+                        dob.getFullYear() -
+                        (today <
+                        new Date(
+                            dob.getFullYear() +
+                                (today.getFullYear() - dob.getFullYear()),
+                            dob.getMonth(),
+                            dob.getDate(),
+                        )
+                            ? 1
+                            : 0);
+                    return age >= 13 || "You must be at least 13 years old";
+                },
+                terms: (v) => v === true || "You must accept terms",
+            };
+
+            function showError(id, msg) {
+                const el = qs("#" + id + "-error");
+                if (!el) return;
+                el.textContent =
+                    msg === true || msg === false || !msg ? "" : msg;
+            }
+
+            function validateForm(data, rules) {
+                let ok = true;
+                for (const key in rules) {
+                    const rule = rules[key];
+                    const value = data[key];
+                    const res =
+                        rule.length > 1 ? rule(value, data) : rule(value);
+                    if (res !== true) {
+                        ok = false;
+                        showError(key, res);
+                    } else {
+                        showError(key, "");
+                    }
+                }
+                return ok;
+            }
+
+            const signupForm = qs("#signup-form");
+            signupForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const data = {
+                    username: qs("#username").value.trim(),
+                    email: qs("#email").value.trim(),
+                    phone: qs("#phone").value.trim(),
+                    dob: qs("#dob").value,
+                    password: qs("#password").value,
+                    confirmPassword: qs("#confirm-password").value,
+                    terms: qs("#terms").checked,
+                };
+
+                const rules = {
+                    username: (v) => validators.username(v),
+                    email: (v) => validators.email(v),
+                    phone: (v) => validators.phone(v),
+                    dob: (v) => validators.dob(v),
+                    password: (v) => validators.password(v),
+                    confirmPassword: (v, all) =>
+                        validators.confirmPassword(v, all),
+                    terms: (v) => validators.terms(v),
+                };
+
+                const valid = validateForm(data, rules);
+                const feedback = qs("#signup-feedback");
+                if (!valid) {
+                    feedback.textContent = "Please fix errors above.";
+                    feedback.className = "error";
+                    return;
+                }
+
+                feedback.textContent = "Account created successfully (demo).";
+                feedback.className = "success";
+                signupForm.reset();
+            });
+
+            const loginForm = qs("#login-form");
+            loginForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const identifier = qs("#login-identifier").value.trim();
+                const password = qs("#login-password").value;
+                let ok = true;
+                if (!identifier) {
+                    showError("login-identifier", "Enter email or username");
+                    ok = false;
+                } else {
+                    showError("login-identifier", "");
+                }
+                if (!password) {
+                    showError("login-password", "Enter password");
+                    ok = false;
+                } else {
+                    showError("login-password", "");
+                }
+                const fb = qs("#login-feedback");
+                if (!ok) {
+                    fb.textContent = "Please fix errors above.";
+                    fb.className = "error";
+                    return;
+                }
+                fb.textContent = "Logged in (demo).";
+                fb.className = "success";
+                loginForm.reset();
+            });
+
+            qs("#fill-sample").addEventListener("click", () => {
+                qs("#username").value = "demo_user";
+                qs("#email").value = "demo@example.com";
+                qs("#phone").value = "+12345678901";
+                const d = new Date();
+                d.setFullYear(d.getFullYear() - 20);
+                qs("#dob").value = d.toISOString().slice(0, 10);
+                qs("#password").value = "Password1";
+                qs("#confirm-password").value = "Password1";
+                qs("#terms").checked = true;
+            });
+
+            qsa("input").forEach((input) => {
+                input.addEventListener("input", () => {
+                    const id = input.id.replace(/-(.+)/, "");
+                    const err = input.getAttribute("aria-describedby");
+                    if (id) showError(input.id.replace(/-error$/, ""), "");
+                });
+            });
+        </script>
+    </body>
+</html>
