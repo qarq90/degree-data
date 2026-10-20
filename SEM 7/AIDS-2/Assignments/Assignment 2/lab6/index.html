@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Amazon Lex for JavaScript - Sample Application (NTBBot)</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1440.0.min.js"></script>
+
+    <style language="text/css">
+        body {
+            font-family:  "Helvetica Neue", "Arial";
+        }
+
+        input#wisdom {
+            padding: 4px;
+            font-size: 1em;
+            width: 380px
+        }
+
+        input::placeholder {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        p.userRequest {
+            margin: 4px;
+            padding: 4px 10px 4px 10px;
+            border-radius: 4px;
+            min-width: 50%;
+            max-width: 85%;
+            float: left;
+            background-color: #7d7;
+        }
+
+        p.lexResponse {
+            margin: 4px;
+            padding: 4px 10px 4px 10px;
+            border-radius: 4px;
+            text-align: right;
+            min-width: 50%;
+            max-width: 85%;
+            float: right;
+            background-color: #bdf;
+            font-style: italic;
+        }
+
+        span.cardTitle {
+            display: block;
+            float: left;
+            width:  100%;
+            margin: 0px;
+            padding: 5px;
+            text-align: left;
+            font-style: normal;
+            font-weight: bolder;
+            color: #009
+        }
+
+        span.cardSubtitle {
+            display: block;
+            float: left;
+            width:  100%;
+            margin: 0px;
+            padding: 5px;
+            text-align: left;
+            font-style: normal;
+            font-weight: normal
+        }
+
+        span.cardOptions {
+            display: block;
+            float: left;
+            width:  90%;
+            margin: 0px;
+            padding: 12px;
+            text-align: center
+        }
+
+        a.cardOption {
+            display:  inline-block;
+            margin: 4px 8px 4px 8px;
+            padding: 6px;
+            border-radius: 6px;
+            background-color: #eef;
+            color: #009;
+            text-align: center;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none
+        }
+
+        a.cardOption:hover {
+            background-color:  #ccf;
+        }
+
+        p.lexError {
+            margin: 4px;
+            padding: 4px 10px 4px 10px;
+            border-radius: 4px;
+            text-align: right;
+            min-width: 50%;
+            max-width: 85%;
+            float: right;
+            background-color: #f77;
+        }
+
+        a.appAction {
+            width:  80px;
+            display:  inline-block;
+            margin: 0px 8px 4px 8px;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #f67e00;
+            color: #fff;
+            text-align: center;
+            font-style: normal;
+            font-weight: normal;
+            text-decoration: none
+        }
+
+        a.appAction:hover {
+            background-color:  #e66e00;;
+        }
+    </style>
+    <meta name="viewport" content="width=420">
+</head>
+
+<body>
+    <h1 style="text-align:  left">Amazon Lex - Appointment BOT</h1>
+    
+    <div id="searchResults" style="width: 380px; height: 450px; border: 1px solid #ccc; background-color: #eee; padding: 4px; overflow: scroll; margin-right: 10px; float: left; display: none"></div>
+    <div id="conversation" style="width: 380px; height: 450px; border: 1px solid #ccc; background-color: #eee; padding: 4px; overflow: scroll"></div>
+    <form id="chatform" style="margin-bottom: 10px" onsubmit="return pushChat();">
+        <p style="width: 380px; font-size: 0.8em; line-height: 1.2em">
+            <input type="text" id="wisdom" size="80" value="" placeholder="What do you want to do?">
+        </p>
+    </form>
+
+<script type="text/javascript">
+// set the focus to the input box
+document.getElementById("wisdom").focus();
+
+// Initialize the Amazon Cognito credentials provider 
+//replace the 
+AWS.config.region = 'us-east-1'; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1:e289b45f-cb38-4d7c-8404-b2db1bdcaaf6',
+});
+
+var lexRuntimeV2 = new AWS.LexRuntimeV2();
+var lexUserId = 'chatbot-demo' + Date.now();
+var sessionAttributes = {};
+
+// Configuration for your Lex V2 bot
+const BOT_ID = 'LIUWR3HYZW'; // Your Bot ID
+const BOT_ALIAS_ID = 'TSTALIASID'; // Your Bot Alias ID
+const LOCALE_ID = 'en_US';
+
+function pushChat() {
+    var wisdomText = document.getElementById('wisdom');
+    var wisdom = wisdomText.value.trim();
+    
+    if (wisdom.length > 0) {
+        console.log('User input:', wisdom);
+        
+        // disable input while processing
+        wisdomText.value = '';
+        wisdomText.locked = true;
+
+        // Show user's message
+        showRequest(wisdom);
+
+        // Prepare parameters for Lex V2
+        var params = {
+            botId: BOT_ID,
+            botAliasId: BOT_ALIAS_ID,
+            localeId: LOCALE_ID,
+            sessionId: lexUserId,
+            text: wisdom
+        };
+
+        // Call Lex V2
+        lexRuntimeV2.recognizeText(params).promise()
+            .then(data => {
+                console.log('Lex Response:', data);
+
+                // Handle messages from Lambda through Lex
+                if (data && data.messages) {
+                    data.messages.forEach(message => {
+                        if (message.content) {
+                            showResponse(message.content);
+                        }
+                    });
+                }
+
+                // Handle session state and intent fulfillment
+                if (data && data.sessionState && 
+                    data.sessionState.intent && 
+                    data.sessionState.intent.state === 'ReadyForFulfillment') {
+                    console.log('Intent fulfilled, full response:', data);
+                    
+                    // Get appointment details from the intent slots
+                    const slots = data.sessionState.intent.slots;
+                    console.log('Slots:', slots);
+
+                    // Safely extract time from resolvedValues array (take first value)
+                    const appointmentTime = slots && slots.Time && 
+                                         slots.Time.value && 
+                                         slots.Time.value.resolvedValues && 
+                                         slots.Time.value.resolvedValues.length > 0 ? 
+                                         slots.Time.value.resolvedValues[0] : null;
+
+                    // Safely extract date - try resolvedValues first, then fall back to original value
+                    const dateSlot = slots && slots.Date && slots.Date.value;
+                    const appointmentDate = dateSlot && 
+                                         (dateSlot.resolvedValues && dateSlot.resolvedValues.length > 0 ? 
+                                          dateSlot.resolvedValues[0] : 
+                                          dateSlot.originalValue || dateSlot.value);
+                    
+                    console.log('Extracted time:', appointmentTime);
+                    console.log('Extracted date:', appointmentDate);
+                    
+                    // Only show confirmation if we have valid appointment data
+                    if (appointmentTime && appointmentDate) {
+                        const confirmationMessage = `Your appointment has been confirmed for ${appointmentDate} at ${appointmentTime}`;
+                        showResponse(confirmationMessage);
+                        
+                        // Disable input after successful confirmation
+                        wisdomText.locked = true;
+                        wisdomText.placeholder = 'Appointment confirmed';
+                        wisdomText.disabled = true;
+                    } else {
+                        console.error('Missing appointment details. Time:', appointmentTime, 'Date:', appointmentDate);
+                        showResponse('There was an issue confirming your appointment. Please try again.');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                showError('Error: ' + err.message);
+            })
+            .finally(() => {
+                // Re-enable input only if not locked due to confirmation
+                if (!wisdomText.locked) {
+                    wisdomText.value = '';
+                }
+                wisdomText.locked = false;
+            });
+    }
+    return false; // prevent form submission
+}
+
+    function showRequest(text) {
+        var conversationDiv = document.getElementById('conversation');
+        var requestPara = document.createElement("P");
+        requestPara.className = 'userRequest';
+        requestPara.appendChild(document.createTextNode(text));
+        conversationDiv.appendChild(requestPara);
+        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+    }
+
+    function showError(text) {
+        var conversationDiv = document.getElementById('conversation');
+        var errorPara = document.createElement("P");
+        errorPara.className = 'lexError';
+        errorPara.appendChild(document.createTextNode(text));
+        conversationDiv.appendChild(errorPara);
+        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+    }
+
+    function showResponse(text) {
+        console.log('Showing response:', text); // Debug log
+        var conversationDiv = document.getElementById('conversation');
+        var responsePara = document.createElement("P");
+        responsePara.className = 'lexResponse';
+        responsePara.appendChild(document.createTextNode(text));
+        conversationDiv.appendChild(responsePara);
+        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+    }
+
+    // Show initial greeting
+    showResponse('Hi there! What do you want to do?');
+
+</script>
+
+</body>
+
+</html>
